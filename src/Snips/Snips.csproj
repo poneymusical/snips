@@ -19,7 +19,4 @@
     <None Include="wwwroot\css\site.css" />
     <None Include="wwwroot\js\site.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\lib" />
-  </ItemGroup>
 </Project>
