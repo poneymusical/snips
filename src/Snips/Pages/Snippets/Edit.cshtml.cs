@@ -10,6 +10,7 @@ namespace Snips.Pages.Snippets
     {
         [BindProperty(SupportsGet = true)]
         public string Id { get; set; }
+        
         public Snippet Snippet { get; set; }
 
         public void OnGet()

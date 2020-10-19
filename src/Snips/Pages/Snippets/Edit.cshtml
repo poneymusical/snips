@@ -6,11 +6,16 @@
     ViewData["Title"] = "Snippets";
 }
 
-<h1>@Model.Snippet.Title</h1>
-<h2>Editor</h2>
-<div id="editor"></div>
-<h2>Preview</h2>
-<div id="preview"></div>
+<form>
+    <div class="form-group">
+        <label for="inputTitle">Title</label>
+        <input type="text" class="form-control" id="inputTitle" value="@Model.Snippet.Title" placeholder="The title of your snippet">
+    </div>
+    <div class="row flex">
+        <div id="editor" class="col col-xs-6"></div>
+        <div id="preview" class="col col-xs-6"></div>
+    </div>
+</form>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs' } };</script>
@@ -18,26 +23,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/editor/editor.main.nls.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/editor/editor.main.js"></script>
 <script>
-    const content = "@HttpUtility.JavaScriptStringEncode(Model.Snippet.Content)";
-    var editorDiv = document.getElementById('editor');
-    editorDiv.style.height = '400px';
-    editorDiv.style.width = '500px';
-    
-    var preview = document.getElementById('preview');
-    preview.style.height = '400px';
-    preview.style.width = '500px';    
-
-    var editor = monaco.editor.create(editorDiv,
-        {
-            value: content,
-            language: "markdown",
-            theme: "vs-dark"
-        });    
-    
     function refreshPreview(){
         preview.innerHTML = marked(editor.getValue());  
     }
+
+    const content = "@HttpUtility.JavaScriptStringEncode(Model.Snippet.Content)";
+    var editorDiv = document.getElementById('editor');
+    editorDiv.style.height = '500px';
     
-    editor.getModel().onDidChangeContent((e) => refreshPreview()); 
+    var preview = document.getElementById('preview');
+    preview.style.height = '500px';   
+
+    var editor = monaco.editor.create(editorDiv, {
+        value: content,
+        language: "markdown",
+        theme: "vs-dark",
+        scrollBeyondLastLine: false,
+    });    
+    
+    editor.getModel().onDidChangeContent((e) => refreshPreview());
     refreshPreview();
 </script>
