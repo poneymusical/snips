@@ -19,3 +19,7 @@ steps:
   displayName: 'Unit tests'
 - script: dotnet publish src/Snips/Snips.csproj --output $(Build.ArtifactStagingDirectory)
   displayName: 'Publish'
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'Snips_website'
