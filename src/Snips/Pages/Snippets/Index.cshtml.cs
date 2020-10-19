@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Snips.Domain.BusinessObjects;
@@ -8,6 +9,7 @@ using Snips.ViewModels;
 
 namespace Snips.Pages.Snippets
 {
+    [Authorize]
     public class Index : PageModel
     {
         public Snippet Snippet { get; set; }
@@ -73,7 +75,7 @@ namespace Snips.Pages.Snippets
                     "## Titre de section",
                     $"Contenu du snippet #{snippetId}"
                 ),
-                Title = $"Le titre du snippet #{snippetId}"
+                Title = $"Le titre du snippet #{snippetId}, titre super long qui remplit bien plus qu'une ligne de texte voilà voilà"
             });
         }
     }
