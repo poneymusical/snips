@@ -7,11 +7,24 @@
 }
 
 <form>
-    <div class="form-group">
-        <label for="inputTitle">Title</label>
-        <input type="text" class="form-control" id="inputTitle" value="@Model.Snippet.Title" placeholder="The title of your snippet">
+    <div class="form-group row">
+        <label for="inputTitle" class="col-1 col-form-label">Title</label>
+        <div class="col-9">
+            <input type="text" class="form-control" id="inputTitle" value="@Model.Title" placeholder="The title of your snippet">
+        </div>
+        <div class="col-1">
+            <a id="save-button" href="/snippets" class="btn btn-primary">Save</a>
+        </div>
+        <div class="col-1">
+            <a id="cancel-button" href="/snippets" class="btn btn-secondary">Cancel</a>
+        </div>
+
     </div>
-    <div class="row flex">
+
+    <div class="form-group row">
+        <label for="editor" class="col-1 col-form-label">Content</label>
+    </div>
+    <div class="col-12 row">
         <div id="editor" class="col col-xs-6"></div>
         <div id="preview" class="col col-xs-6"></div>
     </div>
@@ -27,12 +40,12 @@
         preview.innerHTML = marked(editor.getValue());  
     }
 
-    const content = "@HttpUtility.JavaScriptStringEncode(Model.Snippet.Content)";
+    const content = "@HttpUtility.JavaScriptStringEncode(Model.Content)";
     var editorDiv = document.getElementById('editor');
-    editorDiv.style.height = '500px';
+    
     
     var preview = document.getElementById('preview');
-    preview.style.height = '500px';   
+       
 
     var editor = monaco.editor.create(editorDiv, {
         value: content,
