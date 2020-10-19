@@ -1,0 +1,73 @@
+﻿@page
+@using Newtonsoft.Json
+@model Snips.Pages.Snippets.Index
+
+@{
+    ViewData["Title"] = "Snippets";
+}
+
+
+<div class="row">
+    <div id="tree" class="col-xs-4"></div>
+    <div id="viewer" class="col col-xs-8">
+        <div id="title-row" class="row" style="display: none;">
+            <div class="col col-xs-10">
+                <h1 id="title" class="snippet-title"></h1>
+            </div>
+            <div class="col-xs-2">
+                <a id="edit-button" href="/snippets/edit" class="btn btn-primary">Edit</a>
+            </div>
+        </div>
+        
+        <div id="content">Select a snippet in the treeview.</div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
+    <script>
+        function setViewerContent(id, title, content){
+            $('#title-row').css("display", "inline-flex");
+            $('#edit-button').attr("href", "/snippets/edit/" + id);
+            $('#title').html(title);
+            $('#content').html(marked(content));    
+        }
+        
+        function resetViewer(){
+            $('#title-row').css("display", "none");
+            $('#edit-button').attr("href", null);
+            $('#title').html(null);
+            $('#content').html("Select a snippet in the treeview.");
+        }
+        
+        function getSnippetContent(snippetId){
+            $.ajax({
+                type: "GET",
+                url: "/Snippets?handler=SnippetData&snippetId=" + snippetId,
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    setViewerContent(response.id, response.title, response.content);
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+        }
+        
+        $('#tree').treeview({ 
+            data: @Html.Raw(JsonConvert.SerializeObject(Model.Tree)),
+            showBorder: false,
+            onNodeSelected: function (event, node) {
+                getSnippetContent(node.id)
+            },
+            onNodeUnselected: function (event,node) {
+                resetViewer();
+            }
+        });
+        $('#tree').treeview(true).expandAll();
+        resetViewer();
+    </script>
+}

@@ -10,5 +10,16 @@
   </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Security\SigninOidc.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\dist\site.entry.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\dist\site.entry.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="client\package-lock.json" />
+    <Content Remove="client\package.json" />
+    <None Include="wwwroot\css\site.css" />
+    <None Include="wwwroot\js\site.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\lib" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,43 @@
+﻿@page "{id}"
+@using System.Web
+@model Snips.Pages.Snippets.Edit
+
+@{
+    ViewData["Title"] = "Snippets";
+}
+
+<h1>@Model.Snippet.Title</h1>
+<h2>Editor</h2>
+<div id="editor"></div>
+<h2>Preview</h2>
+<div id="preview"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs' } };</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/loader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/editor/editor.main.nls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/editor/editor.main.js"></script>
+<script>
+    const content = "@HttpUtility.JavaScriptStringEncode(Model.Snippet.Content)";
+    var editorDiv = document.getElementById('editor');
+    editorDiv.style.height = '400px';
+    editorDiv.style.width = '500px';
+    
+    var preview = document.getElementById('preview');
+    preview.style.height = '400px';
+    preview.style.width = '500px';    
+
+    var editor = monaco.editor.create(editorDiv,
+        {
+            value: content,
+            language: "markdown",
+            theme: "vs-dark"
+        });    
+    
+    function refreshPreview(){
+        preview.innerHTML = marked(editor.getValue());  
+    }
+    
+    editor.getModel().onDidChangeContent((e) => refreshPreview()); 
+    refreshPreview();
+</script>
