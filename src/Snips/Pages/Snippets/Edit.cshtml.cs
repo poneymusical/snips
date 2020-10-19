@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Snips.Domain.BusinessObjects;
@@ -22,7 +23,7 @@ namespace Snips.Pages.Snippets
                 "Contenu du snippet",
                 "* Liste",
                 "* à",
-                "* puces"
+                "* puces é"
             );
             Title = "Le titre du snippet";
         }

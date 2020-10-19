@@ -8,7 +8,9 @@
 
 <form>
     <div class="form-group row">
-        <label for="inputTitle" class="col-1 col-form-label">Title</label>
+        <div class="col-1">
+            <label for="inputTitle" class="col-form-label">Title</label>    
+        </div>
         <div class="col-9">
             <input type="text" class="form-control" id="inputTitle" value="@Model.Title" placeholder="The title of your snippet">
         </div>
@@ -22,7 +24,7 @@
     </div>
 
     <div class="form-group row">
-        <label for="editor" class="col-1 col-form-label">Content</label>
+        <label for="editor" class="col col-form-label">Content</label>
     </div>
     <div class="col-12 row">
         <div id="editor" class="col col-xs-6"></div>
@@ -40,12 +42,12 @@
         preview.innerHTML = marked(editor.getValue());  
     }
 
-    const content = "@HttpUtility.JavaScriptStringEncode(Model.Content)";
+    const content = "@Html.Raw(HttpUtility.JavaScriptStringEncode(Model.Content))";
     var editorDiv = document.getElementById('editor');
-    
+    editorDiv.style.height = "500px";
     
     var preview = document.getElementById('preview');
-       
+    preview.style.height = "500px";   
 
     var editor = monaco.editor.create(editorDiv, {
         value: content,
