@@ -9,7 +9,6 @@ using Snips.ViewModels;
 
 namespace Snips.Pages.Snippets
 {
-    [Authorize]
     public class Index : PageModel
     {
         public Snippet Snippet { get; set; }
