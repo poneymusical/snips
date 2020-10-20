@@ -24,6 +24,7 @@ namespace Snips.Pages.Snippets
                 "* Liste",
                 "* à",
                 "* puces é",
+                "",
                 "<a href=\"#\">link</a>"
             );
             Title = "Le titre du snippet";
