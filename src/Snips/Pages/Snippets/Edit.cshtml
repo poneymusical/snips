@@ -7,55 +7,64 @@
 }
 
 <form>
-    <div class="form-group row">
-        <div class="col-1">
-            <label for="inputTitle" class="col-form-label">Title</label>    
-        </div>
-        <div class="col-9">
-            <input type="text" class="form-control" id="inputTitle" value="@Model.Title" placeholder="The title of your snippet">
-        </div>
-        <div class="col-1">
-            <a id="save-button" href="/snippets" class="btn btn-primary">Save</a>
-        </div>
-        <div class="col-1">
-            <a id="cancel-button" href="/snippets" class="btn btn-secondary">Cancel</a>
+    <div class="columns">
+        <div class="column field">
+            <label class="label">Title</label>
+            <div class="columns">
+                <div class="column control">
+                    <input type="text" class="input" id="inputTitle" value="@Model.Title" placeholder="The title of your snippet">
+                </div>
+                <div class="column is-narrow is-vcentered">
+                    <a id="save-button" href="/snippets" class="button is-primary">Save</a>
+                </div>
+                <div class="column is-narrow is-vcentered">
+                    <a id="cancel-button" href="/snippets" class="button is-light">Cancel</a>
+                </div>
+            </div>
         </div>
 
     </div>
 
-    <div class="form-group row">
-        <label for="editor" class="col col-form-label">Content</label>
+    <label for="editor" class="label">Content</label>
+
+    <div class="columns">
+        <div id="editor" class="column"></div>
+        <div id="preview" class="column content"></div>
     </div>
-    <div class="col-12 row">
-        <div id="editor" class="col col-xs-6"></div>
-        <div id="preview" class="col col-xs-6"></div>
+
+    <div class="content mt-6">
+        <h3>Danger zone</h3>
+        <a id="cancel-button" href="/snippets" class="button is-danger">Delete snippet</a>
     </div>
 </form>
 
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script>var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs' } };</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/loader.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/editor/editor.main.nls.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/editor/editor.main.js"></script>
-<script>
-    function refreshPreview(){
-        preview.innerHTML = marked(editor.getValue());  
-    }
-
-    const content = "@Html.Raw(HttpUtility.JavaScriptStringEncode(Model.Content))";
-    var editorDiv = document.getElementById('editor');
-    editorDiv.style.height = "500px";
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs' }, };</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/editor/editor.main.nls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/editor/editor.main.js"></script>
+    <script>
+        function refreshPreview(){
+            preview.innerHTML = marked(editor.getValue());  
+        }
     
-    var preview = document.getElementById('preview');
-    preview.style.height = "500px";   
-
-    var editor = monaco.editor.create(editorDiv, {
-        value: content,
-        language: "markdown",
-        theme: "vs-dark",
-        scrollBeyondLastLine: false,
-    });    
+        const content = "@Html.Raw(HttpUtility.JavaScriptStringEncode(Model.Content))";
+        var editorDiv = document.getElementById('editor');
+        editorDiv.style.height = "1000px";
+        
+        var preview = document.getElementById('preview');
+        preview.style.height = "1000px";   
     
-    editor.getModel().onDidChangeContent((e) => refreshPreview());
-    refreshPreview();
-</script>
+        var editor = monaco.editor.create(editorDiv, {
+            value: content,
+            language: "markdown",
+            theme: "vs-dark",
+            scrollBeyondLastLine: false,
+        });    
+        
+        editor.getModel().onDidChangeContent((e) => refreshPreview());
+        refreshPreview();
+    </script>
+}

@@ -7,18 +7,25 @@
 }
 
 
-<div class="row">
-    <div id="tree" class="col-xs-4"></div>
-    <div id="viewer" class="col col-xs-8 border-left flex-grow-1">
-        <div id="title-row" class="row justify-content-between">
-            <div class="col col-11">
-                <h1 id="title" class="snippet-title"></h1>
+<div class="columns">
+    <div id="tree" class="column is-one-quarter"></div>
+    <div id="viewer" class="column">
+        <div id="title-row" class="columns">
+            <div class="column is-vcentered content">
+                <h1 id="title"></h1>
             </div>
-            <div class="col">
-                <a id="edit-button" href="/snippets/edit" class="btn btn-primary">Edit</a>
+            <div class="column is-narrow is-vcentered">
+                <a id="edit-button" href="/snippets/edit" class="button is-primary">Edit</a>
             </div>
         </div>
-        <div id="content">Select a snippet in the treeview.</div>
+        <div id="content" class="content"></div>
+        <div id="placeholder" class="columns">
+            <div class="column is-vcentered is-full mt-6">
+                <div class="content">
+                    <i>Select a snippet in the treeview.</i>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -26,10 +33,13 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
-    
+
     <script>
         function setViewerContent(id, title, content){
             $('#title-row').css("display", "");
+            $('#content').css("display", "");
+            $('#placeholder').css("display", "none");
+            
             $('#edit-button').attr("href", "/snippets/edit/" + id);
             $('#title').html(title);
             $('#content').html(marked(content));
@@ -37,9 +47,12 @@
         
         function resetViewer(){
             $('#title-row').css("display", "none");
+            $('#content').css("display", "none");
+            $('#placeholder').css("display", "");
+            
             $('#edit-button').attr("href", null);
             $('#title').html(null);
-            $('#content').html("Select a snippet in the treeview.");
+            $('#content').html(null);
         }
         
         function getSnippetContent(snippetId){
