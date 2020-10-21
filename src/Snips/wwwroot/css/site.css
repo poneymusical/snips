@@ -1,13 +1,30 @@
-﻿footer{
-  padding: 1rem 1rem 1rem !important;
+﻿footer {
+    padding: 1rem 1rem 1rem !important;
 }
 
 html, body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 body > footer {
-  margin-top: auto;
+    margin-top: auto;
 }
+
+.is-90-vh {
+    min-height : 90vh;
+}
+
+#tabs-with-content .tabs:not(:last-child) {
+    margin-bottom: 0;
+}
+
+#tabs-with-content .tab-content {
+    display: none;
+}
+
+#tabs-with-content .tab-content.is-active {
+    display: block;
+}
+
