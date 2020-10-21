@@ -77,9 +77,6 @@
             scrollBeyondLastLine: false,
             automaticLayout: true
         });    
-        
-        editor.getModel().onDidChangeContent((e) => refreshPreview());
-        refreshPreview();
 
         const tabs = document.querySelectorAll('.tabs li');
         const tabsContent = document.querySelectorAll('.tab-content');
@@ -110,6 +107,7 @@
                 hideTabsContent();
                 tab.classList.add('is-active');
                 activateTabsContent(tab);
+                refreshPreview();
             });
         })
         
