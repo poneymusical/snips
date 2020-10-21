@@ -25,9 +25,25 @@
     <div class="field">
         <label class="label">Content</label>
         <p class="help">You can edit the content in the left pane; the preview will automatically refresh itself.</p>
-        <div class="columns">
-            <div id="editor" class="column"></div>
-            <div id="preview" class="column content"></div>
+        <div id="tabs-with-content">
+            <div class="tabs">
+                <ul>
+                    <li class="is-active">
+                        <a>Edit</a>
+                    </li>
+                    <li>
+                        <a>Preview</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <section class="tab-content">
+                    <div id="editor" class="column is-90-vh p-0"></div>
+                </section>
+                <section class="tab-content">
+                    <div id="preview" class="column content is-90-vh"></div>
+                </section>
+            </div>
         </div>
     </div>
 
@@ -51,19 +67,52 @@
     
         const content = "@Html.Raw(HttpUtility.JavaScriptStringEncode(Model.Content))";
         var editorDiv = document.getElementById('editor');
-        editorDiv.style.height = "1000px";
         
-        var preview = document.getElementById('preview');
-        preview.style.height = "1000px";   
+        var preview = document.getElementById('preview');   
     
         var editor = monaco.editor.create(editorDiv, {
             value: content,
             language: "markdown",
             theme: "vs-dark",
             scrollBeyondLastLine: false,
+            automaticLayout: true
         });    
         
         editor.getModel().onDidChangeContent((e) => refreshPreview());
         refreshPreview();
+
+        const tabs = document.querySelectorAll('.tabs li');
+        const tabsContent = document.querySelectorAll('.tab-content');
+        
+        let deactivateAllTabs = function () {
+            tabs.forEach(function (tab) {
+                tab.classList.remove('is-active');
+            });
+        };
+        
+        function hideTabsContent() {
+            tabsContent.forEach(function (tabContent) {
+                tabContent.classList.remove('is-active');
+            });
+        };
+        
+        function activateTabsContent(tab) {
+            tabsContent[getIndex(tab)].classList.add('is-active');
+        };
+        
+        function getIndex(el) {
+            return [...el.parentElement.children].indexOf(el);
+        };
+        
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                deactivateAllTabs();
+                hideTabsContent();
+                tab.classList.add('is-active');
+                activateTabsContent(tab);
+            });
+        })
+        
+        tabs[0].click();
     </script>
 }
