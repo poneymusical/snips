@@ -1,14 +1,34 @@
 ﻿@page
-@using Newtonsoft.Json
 @model Snips.Pages.Snippets.Index
 
 @{
     ViewData["Title"] = "Snippets";
 }
 
-
 <div class="columns">
-    <div id="tree" class="column is-one-quarter"></div>
+    <div id="tree" class="column is-one-quarter">
+            <aside class="menu">
+                <ul class="menu-list">
+                    <li>
+                        <a class="menu-leaf" data-id="b92e8f5e74544f1f82179e6eb93ae334">1</a>
+                    </li>
+                    <li>
+                        <a class="menu-node">2</a>
+                        <ul class="menu-list">
+                            <li>
+                                <a class="menu-leaf" data-id="ef36ab98cf7d42d681638cecd4e0948b">2.1</a>
+                            </li>
+                            <li>
+                                <a class="menu-leaf" data-id="e049c2da802e4884b5bcadc45094b55e">2.2</a>
+                            </li>
+                            <li>
+                                <a class="menu-leaf" data-id="d6f0241a183b4ae79865562e89d05df2">2.3</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </aside>
+        </div>
     <div id="viewer" class="column">
         <div id="title-row" class="columns">
             <div class="column is-vcentered content">
@@ -69,18 +89,27 @@
                 }
             });
         }
-        
-        $('#tree').treeview({ 
-            data: @Html.Raw(JsonConvert.SerializeObject(Model.Tree)),
-            showBorder: false,
-            onNodeSelected: function (event, node) {
-                getSnippetContent(node.id)
-            },
-            onNodeUnselected: function (event,node) {
+
+        //menu-leaf : when clicking a menu-leaf, content should be displayed to the right, leaf should be put active
+        let allLeaves = $('.menu-leaf');
+        const isActive = "is-active";
+        allLeaves.click(function() { 
+            if ($(this).hasClass(isActive)){
+                //if current leaf is active, deactivate all leaves and reset viewer
+                allLeaves.removeClass(isActive);
                 resetViewer();
+            }     
+            else {
+                //if inactive, deactivate all leaves, activate current leaf and set viewer content
+                allLeaves.removeClass(isActive);
+                $(this).addClass(isActive);
+                let snippetId = $(this).attr("data-id");
+                getSnippetContent(snippetId);
             }
         });
-        $('#tree').treeview(true).expandAll();
-        resetViewer();
+        
+        //menu-node : when clicking
+    
+        resetViewer();        
     </script>
 }

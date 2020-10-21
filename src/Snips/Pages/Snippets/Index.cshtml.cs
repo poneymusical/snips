@@ -46,7 +46,7 @@ namespace Snips.Pages.Snippets
             // dir2.AddChild(new TreeViewNode(Guid.NewGuid(), "Snippet 2_1", NodeType.File));
             // dir2.AddChild(new TreeViewNode(Guid.NewGuid(), "Snippet 2_2", NodeType.File));
 
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < 5; i++)
                 dir2.AddChild(new TreeViewNode(Guid.NewGuid(), $"Snippet 2_{i + 1}", NodeType.File));
 
             Tree = new List<TreeViewNode> { dir1, dir2 };
