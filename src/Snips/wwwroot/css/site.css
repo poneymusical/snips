@@ -39,4 +39,5 @@ div.menu-node, li.menu-leaf {
     padding-bottom: 0.25em;
     padding-left: 0.75em;
     cursor: pointer;
+    user-select: none;
 }
