@@ -35,7 +35,7 @@
                 <h1 id="title"></h1>
             </div>
             <div class="column is-narrow is-vcentered">
-                <a id="edit-button" href="/snippets/edit" class="button is-primary">Edit</a>
+                <a id="edit-button" class="button is-primary">Edit</a>
             </div>
         </div>
         <div id="content" class="content"></div>
@@ -108,7 +108,10 @@
             }
         });
         
-        //menu-node : when clicking
+        //menu-node : when clicking a menu-node, the <ul> that is right next to it should be hidden or displayed
+        $('.menu-node').click(function () {
+                $(this).siblings('ul').toggle();
+            });
     
         resetViewer();        
     </script>
