@@ -13,7 +13,7 @@ namespace Snips.Pages.Snippets
     {
         public Snippet Snippet { get; set; }
 
-        public List<TreeViewNode> Tree { get; set; }
+        public List<TreeviewItem> Tree { get; set; }
 
         public void OnGet()
         {
@@ -30,26 +30,26 @@ namespace Snips.Pages.Snippets
              *     snippet22
              */
 
-            var dir1 = new TreeViewNode(Guid.NewGuid(), "Directory 1", NodeType.Directory);
-            dir1.AddChild(new TreeViewNode(Guid.NewGuid(), "Snippet 1_1", NodeType.File));
+            var dir1 = new TreeviewItem(Guid.NewGuid(), "Directory 1", TreeviewItemType.Node);
+            dir1.AddChild(new TreeviewItem(Guid.NewGuid(), "Snippet 1_1", TreeviewItemType.Leaf));
 
-            var dir11 = new TreeViewNode(Guid.NewGuid(), "Directory 1_1", NodeType.Directory);
+            var dir11 = new TreeviewItem(Guid.NewGuid(), "Directory 1_1", TreeviewItemType.Node);
             dir1.AddChild(dir11);
-            dir11.AddChild(new TreeViewNode(Guid.NewGuid(), "Snippet 1_1_1", NodeType.File));
-            dir11.AddChild(new TreeViewNode(Guid.NewGuid(), "Snippet 1_1_2", NodeType.File));
+            dir11.AddChild(new TreeviewItem(Guid.NewGuid(), "Snippet 1_1_1", TreeviewItemType.Leaf));
+            dir11.AddChild(new TreeviewItem(Guid.NewGuid(), "Snippet 1_1_2", TreeviewItemType.Leaf));
 
-            var dir12 = new TreeViewNode(Guid.NewGuid(), "Directory 1_2", NodeType.Directory);
+            var dir12 = new TreeviewItem(Guid.NewGuid(), "Directory 1_2", TreeviewItemType.Node);
             dir1.AddChild(dir12);
-            dir12.AddChild(new TreeViewNode(Guid.NewGuid(), "Snippet 1_2_1", NodeType.File));
+            dir12.AddChild(new TreeviewItem(Guid.NewGuid(), "Snippet 1_2_1", TreeviewItemType.Leaf));
 
-            var dir2 = new TreeViewNode(Guid.NewGuid(), "Directory 2", NodeType.Directory);
+            var dir2 = new TreeviewItem(Guid.NewGuid(), "Directory 2", TreeviewItemType.Node);
             // dir2.AddChild(new TreeViewNode(Guid.NewGuid(), "Snippet 2_1", NodeType.File));
             // dir2.AddChild(new TreeViewNode(Guid.NewGuid(), "Snippet 2_2", NodeType.File));
 
             for (var i = 0; i < 5; i++)
-                dir2.AddChild(new TreeViewNode(Guid.NewGuid(), $"Snippet 2_{i + 1}", NodeType.File));
+                dir2.AddChild(new TreeviewItem(Guid.NewGuid(), $"Snippet 2_{i + 1}", TreeviewItemType.Leaf));
 
-            Tree = new List<TreeViewNode> { dir1, dir2 };
+            Tree = new List<TreeviewItem> { dir1, dir2 };
 
             Snippet = new Snippet
             {

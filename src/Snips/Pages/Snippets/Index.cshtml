@@ -7,28 +7,10 @@
 
 <div class="columns">
     <div id="tree" class="column is-one-quarter">
-            <aside class="menu">
-                <ul class="menu-list">
-                    <li>
-                        <a class="menu-leaf" data-id="b92e8f5e74544f1f82179e6eb93ae334">1</a>
-                    </li>
-                    <li>
-                        <a class="menu-node">2</a>
-                        <ul class="menu-list">
-                            <li>
-                                <a class="menu-leaf" data-id="ef36ab98cf7d42d681638cecd4e0948b">2.1</a>
-                            </li>
-                            <li>
-                                <a class="menu-leaf" data-id="e049c2da802e4884b5bcadc45094b55e">2.2</a>
-                            </li>
-                            <li>
-                                <a class="menu-leaf" data-id="d6f0241a183b4ae79865562e89d05df2">2.3</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </aside>
-        </div>
+        <aside class="menu">
+            <partial name="Shared/_Treeview" model="Model.Tree"/>
+        </aside>
+    </div>
     <div id="viewer" class="column">
         <div id="title-row" class="columns">
             <div class="column is-vcentered content">
@@ -109,10 +91,36 @@
         });
         
         //menu-node : when clicking a menu-node, the <ul> that is right next to it should be hidden or displayed
-        $('.menu-node').click(function () {
-                $(this).siblings('ul').toggle();
+        function expandNode(node){
+            let folderIcon = $(node).children('span.icon');
+            folderIcon.removeClass("fa-folder")
+            folderIcon.addClass("fa-folder-open");
+            $(node).siblings('ul').show();
+            $(node).removeClass('collapsed');
+            $(node).addClass('expanded');
+        }
+        
+        function collapseNode(node){
+            let folderIcon = node.children('span.icon');
+            folderIcon.removeClass("fa-folder-open")
+            folderIcon.addClass("fa-folder");
+            $(node).siblings('ul').hide();
+            $(node).removeClass('expanded');
+            $(node).addClass('collapsed');
+        }
+        
+        let allNodes = $('.menu-node');
+        allNodes.click(function () {
+            if ($(this).hasClass('collapsed')) {
+                expandNode($(this));
+            }
+            else if ($(this).hasClass('expanded')) {
+                collapseNode($(this));    
+            }
+            
             });
     
-        resetViewer();        
+        allNodes.each(function (index, value){ expandNode(value);});      
+        resetViewer();
     </script>
 }

@@ -1,0 +1,25 @@
+﻿@using Snips.ViewModels
+@model IEnumerable<Snips.ViewModels.TreeviewItem>
+
+<ul class="menu-list mt-0">
+    @foreach (var item in Model.OrderBy(i => i.Type))
+    {
+        if (item.Type == TreeviewItemType.Leaf)
+        {
+            <li class="menu-leaf" data-id="@item.Id">
+                <span class="icon fas fa-file"></span>
+                <span>@item.Text</span>
+            </li>
+        }
+        else if (item.Type == TreeviewItemType.Node)
+        {
+            <li>
+                <div class="menu-node">
+                    <span class="icon fas fa-folder"></span>
+                    <span>@item.Text</span>
+                </div >
+                <partial name="_Treeview" model="item.Children"/>
+            </li>
+        }
+    }
+</ul >

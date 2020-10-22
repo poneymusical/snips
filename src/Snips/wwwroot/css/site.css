@@ -13,7 +13,7 @@ body > footer {
 }
 
 .is-90-vh {
-    min-height : 90vh;
+    min-height: 90vh;
 }
 
 #tabs-with-content .tabs:not(:last-child) {
@@ -28,3 +28,15 @@ body > footer {
     display: block;
 }
 
+li.is-active {
+    background-color: #3273dc;
+    color: #fff;
+}
+
+div.menu-node, li.menu-leaf {
+    padding-top: 0.5em;
+    padding-right: 0.75em;
+    padding-bottom: 0.25em;
+    padding-left: 0.75em;
+    cursor: pointer;
+}
