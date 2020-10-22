@@ -1,11 +1,16 @@
+using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Snips.Mongo.DI;
 
 namespace Snips
 {
@@ -36,7 +41,19 @@ namespace Snips
                     options.SaveTokens = true;
                 });
 
-            services.AddRazorPages();
+            services.AddDatabase(Configuration.GetSection("Mongo"));
+
+            Action<MvcNewtonsoftJsonOptions> newtonsoftOptions = options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            };
+            
+            services.AddRazorPages()
+                .AddNewtonsoftJson(newtonsoftOptions);
+
+            services.AddControllers()
+                .AddNewtonsoftJson(newtonsoftOptions);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,7 +76,11 @@ namespace Snips
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapRazorPages(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
+            });
         }
     }
 }

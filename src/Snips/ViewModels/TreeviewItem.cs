@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Snips.Domain.BusinessObjects;
 
 namespace Snips.ViewModels
 {
@@ -23,7 +24,17 @@ namespace Snips.ViewModels
         public IReadOnlyList<TreeviewItem> Children
             => _children;
 
-        public TreeviewItem(Guid id, string text, TreeviewItemType treeviewItemType)
+        public TreeviewItem(Directory directory)
+            : this(directory.Id, directory.Name, TreeviewItemType.Node)
+        {
+        }
+
+        public TreeviewItem(Snippet snippet)
+            : this(snippet.Id, snippet.Title, TreeviewItemType.Leaf)
+        {
+        }
+
+        private TreeviewItem(Guid id, string text, TreeviewItemType treeviewItemType)
         {
             Type = treeviewItemType;
             if (treeviewItemType == TreeviewItemType.Node)

@@ -1,15 +1,18 @@
 ﻿using System;
 using Newtonsoft.Json;
+using Snips.Domain.BusinessObjects.Base;
 
 namespace Snips.Domain.BusinessObjects
 {
-    public class Snippet
+    public class Snippet : IIdentifiable
     {
-        [JsonProperty("id")]
         public Guid Id { get; set; }
-        [JsonProperty("title")]
         public string Title { get; set; }
-        [JsonProperty("content")]
         public string Content { get; set; }
+        
+        public Guid? DirectoryId { get; set; }
+
+        [JsonIgnore] 
+        public bool IsSolo => !DirectoryId.HasValue;
     }
 }

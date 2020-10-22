@@ -28,7 +28,7 @@ body > footer {
     display: block;
 }
 
-li.is-active {
+li.menu-leaf.is-active {
     background-color: #3273dc;
     color: #fff;
 }

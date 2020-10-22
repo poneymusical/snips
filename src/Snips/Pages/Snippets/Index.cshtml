@@ -60,7 +60,7 @@
         function getSnippetContent(snippetId){
             $.ajax({
                 type: "GET",
-                url: "/Snippets?handler=SnippetData&snippetId=" + snippetId,
+                url: "/api/snippets/" + snippetId,
                 contentType: "application/json",
                 dataType: "json",
                 success: function (response) {

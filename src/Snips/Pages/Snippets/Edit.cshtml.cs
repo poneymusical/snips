@@ -1,33 +1,34 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Snips.Domain.BusinessObjects;
 using Snips.Domain.Enums;
+using Snips.Domain.Interfaces;
 
 namespace Snips.Pages.Snippets
 {
     public class Edit : PageModel
     {
+        private readonly IRepository<Snippet> _repository;
+        public Edit(IRepository<Snippet> repository)
+        {
+            _repository = repository;
+        }
+        
         [BindProperty(SupportsGet = true)] 
         public Guid? Id { get; set; }
 
-        public string Title { get; set; }
-        public string Content { get; set; }
+        public Snippet Snippet { get; private set; }
 
-        public void OnGet()
+        public async Task OnGet()
         {
-            Id = Guid.NewGuid();
-            Content = string.Join('\n',
-                "## Titre de section",
-                "Contenu du snippet",
-                "* Liste",
-                "* à",
-                "* puces é",
-                "",
-                "<a href=\"#\">link</a>"
-            );
-            Title = "Le titre du snippet";
+            if (Id.HasValue) //Edit existing snippet
+                Snippet = await _repository.GetSingle(Id.Value) 
+                          ?? throw new Exception("Snippet not found");
+            else //Add new snippet
+                Snippet = new Snippet();
         }
     }
 }

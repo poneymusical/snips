@@ -11,7 +11,7 @@
         <label class="label">Title</label>
         <div class="columns">
             <div class="column control">
-                <input type="text" class="input" id="inputTitle" value="@Model.Title" placeholder="The title of your snippet">
+                <input type="text" class="input" id="inputTitle" value="@Model.Snippet.Title" placeholder="The title of your snippet">
             </div>
             <div class="column is-narrow">
                 <a id="save-button" href="/snippets" class="button is-primary">Save</a>
@@ -65,7 +65,7 @@
             preview.innerHTML = marked(editor.getValue());  
         }
     
-        const content = "@Html.Raw(HttpUtility.JavaScriptStringEncode(Model.Content))";
+        const content = "@Html.Raw(HttpUtility.JavaScriptStringEncode(Model.Snippet.Content))";
         var editorDiv = document.getElementById('editor');
         
         var preview = document.getElementById('preview');   
