@@ -13,7 +13,7 @@ namespace Snips.Test
 {
     public class UnitTest1
     {
-        [Fact]
+        [Fact(Skip = "utilities")]
         public async Task Test1()
         {
             BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
