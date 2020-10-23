@@ -1,4 +1,4 @@
-﻿@page "{id}"
+﻿@page "{id?}"
 @using System.Web
 @model Snips.Pages.Snippets.Edit
 
@@ -11,10 +11,10 @@
         <label class="label">Title</label>
         <div class="columns">
             <div class="column control">
-                <input type="text" class="input" id="inputTitle" value="@Model.Snippet.Title" placeholder="The title of your snippet">
+                <input type="text" class="input" id="title-input" value="@Model.Snippet.Title" placeholder="The title of your snippet">
             </div>
             <div class="column is-narrow">
-                <a id="save-button" href="/snippets" class="button is-primary">Save</a>
+                <a id="save-button" class="button is-primary">Save</a>
             </div>
             <div class="column is-narrow">
                 <a id="cancel-button" href="/snippets" class="button is-light">Cancel</a>
@@ -49,7 +49,7 @@
 
     <div class="field mt-6">
         <label class="label">Danger zone</label>
-        <a id="cancel-button" href="/snippets" class="button is-danger">Delete snippet</a>
+        <a id="delete-button" class="button is-danger">Delete snippet</a>
     </div>
 </form>
 
@@ -112,5 +112,42 @@
         })
         
         tabs[0].click();
+        
+        $('#delete-button').click(function (){
+            $.ajax({
+                type: "DELETE",
+                url: "/api/snippets/@Model.Snippet.Id",
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    window.location = "/snippets";
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+        });
+        
+        $('#save-button').click(function (){
+            let snippet = {
+                id: "@Model.Snippet.Id",
+                title: $('#title-input').val(),
+                content: editor.getValue()
+            };
+            
+            $.ajax({
+                type: "@(Model.Snippet.Id == default ? "POST" : "PUT")",
+                url: "/api/snippets",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(snippet),
+                success: function (response) {
+                    window.location = "/snippets";    
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+        })
     </script>
 }

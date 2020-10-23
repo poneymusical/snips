@@ -1,4 +1,6 @@
 using System;
+using System.Reflection;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -42,13 +44,14 @@ namespace Snips
                 });
 
             services.AddDatabase(Configuration.GetSection("Mongo"));
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             Action<MvcNewtonsoftJsonOptions> newtonsoftOptions = options =>
             {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             };
-            
+
             services.AddRazorPages()
                 .AddNewtonsoftJson(newtonsoftOptions);
 

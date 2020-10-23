@@ -28,7 +28,13 @@ namespace Snips.Pages.Snippets
                 Snippet = await _repository.GetSingle(Id.Value) 
                           ?? throw new Exception("Snippet not found");
             else //Add new snippet
-                Snippet = new Snippet();
+                Snippet = new Snippet
+                {
+                    Content = string.Join("\n",
+                        "Insert your content here with a *Markdown* formatting",
+                        string.Empty,
+                        "[Markdown cheatsheet](https://www.markdownguide.org/cheat-sheet/)")
+                };
         }
     }
 }
