@@ -1,0 +1,96 @@
+﻿@page "{id?}"
+@using Snips.ViewModels
+@model Snips.Pages.DIrectories.Edit
+
+<form>
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="columns">
+            <div class="column control">
+                <input type="text" class="input" id="name-input" value="@Model.Directory.Name" placeholder="The name of your directory">
+            </div>
+            <div class="column is-narrow">
+                <a id="save-button" class="button is-primary">Save</a>
+            </div>
+            <div class="column is-narrow">
+                <a id="cancel-button" href="/snippets" class="button is-light">Cancel</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Parent directory</label>
+        <p class="help">Choose the parent of your directory. It may also be placed at the root.</p>
+        <div class="columns mt-0">
+            <div class="column">
+                <div class="select">
+                    @{
+                        var partialModel = new DirectoriesSelectViewModel
+                        {
+                            SelectId = "parentDirectory-select",
+                            Tree = Model.Tree,
+                            SelectedValueId = Model.Directory.ParentDirectoryId
+                        };
+                    }
+                    <partial name="Shared/_DirectoriesSelect" model="partialModel"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    @if (Model.Id.HasValue)
+    {
+        <div class="field mt-6">
+            <label class="label">Danger zone</label>
+            <p class="help">All children snippets and directories will be moved to the root.</p>
+            <a id="delete-button" class="button is-danger">Delete directory</a>
+        </div>    
+    }
+</form>
+
+@section Scripts 
+{
+    <script>
+        @if (Model.Id.HasValue)
+        {
+            <text>
+            $('#delete-button').click(function (){
+                $.ajax({
+                    type: "DELETE",
+                    url: "/api/snippets/@Model.Directory.Id",
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (response) {
+                        window.location = "/snippets";
+                    },
+                    failure: function (response) {
+                        alert(response);
+                    }
+                });
+            });
+            </text>
+        }
+        
+        $('#save-button').click(function (){
+            let snippet = {
+                id: "@Model.Directory.Id",
+                name: $('#name-input').val(),
+                parentDirectoryId: $('#parentDirectory-select').val()
+            };
+            
+            $.ajax({
+                type: "@(Model.Directory.Id == default ? "POST" : "PUT")",
+                url: "/api/directories",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(snippet),
+                success: function (response) {
+                    window.location = "/snippets";    
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+        })
+    </script>
+}

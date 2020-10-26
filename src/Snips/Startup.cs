@@ -11,8 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Snips.Mongo.DI;
+using Snips.Services.Directories;
 
 namespace Snips
 {
@@ -45,11 +47,14 @@ namespace Snips
 
             services.AddDatabase(Configuration.GetSection("Mongo"));
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddTransient<ITreeviewService, TreeviewService>();
 
             Action<MvcNewtonsoftJsonOptions> newtonsoftOptions = options =>
             {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                options.SerializerSettings.Converters.Add(new StringEnumConverter());
             };
 
             services.AddRazorPages()

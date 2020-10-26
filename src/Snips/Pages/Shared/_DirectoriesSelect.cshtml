@@ -1,0 +1,27 @@
+﻿@using Snips.ViewModels
+@model Snips.ViewModels.DirectoriesSelectViewModel
+
+<div class="select">
+    <select id="@Model.SelectId">
+        <option value="">&lt;root&gt;</option>
+        @{ await Options(Model.Tree, string.Empty, Model.SelectedValueId); }
+    </select>
+</div>
+
+@{
+    async Task Options(IList<TreeviewItem> items, string prefix, Guid? selectedValueId)
+    {
+        foreach (var item in items)
+        {
+            if (selectedValueId.HasValue && selectedValueId.Value == item.Id)
+            {
+                <option value="@item.Id" selected>@Html.Raw(prefix)@item.Text</option>;
+            }
+            else
+            {
+                <option value="@item.Id">@Html.Raw(prefix)@item.Text</option>;
+            }
+            await Options(item.Children.ToList(), prefix + "&nbsp;&nbsp;&nbsp;&nbsp;", selectedValueId);
+        }
+    }
+}

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -23,10 +22,8 @@ namespace Snips.API
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
-        {
-            return Ok(await _repository.GetSingle(id));
-        }
+        public async Task<IActionResult> Get(Guid id) => 
+            Ok(await _repository.GetSingle(id));
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Snippet snippet)

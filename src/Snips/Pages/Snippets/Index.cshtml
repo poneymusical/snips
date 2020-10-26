@@ -7,13 +7,21 @@
 
 <div class="columns">
     <div id="tree" class="column is-one-quarter">
-        <a href="/snippets/edit" class="button is-primary mb-2">Add a snippet</a>
+        <div class="columns mb-0">
+            <div class="column is-narrow">
+                <a href="/snippets/edit" class="button is-primary is-small">Add a snippet</a>
+            </div>
+            <div class="column is-narrow">
+                <a href="/directories/edit" class="button is-primary is-small">Add a directory</a>
+            </div>
+        </div>
+        
         <aside class="menu">
-            <partial name="Shared/_Treeview" model="Model.Tree"/>
+            <partial name="Shared/_SnippetsTreeview" model="Model.Tree"/>
         </aside>
     </div>
     <div id="viewer" class="column">
-        <div id="title-row" class="columns">
+        <div id="title-row" class="columns" style="display: none;">
             <div class="column is-vcentered content">
                 <h1 id="title"></h1>
             </div>
@@ -25,7 +33,7 @@
         <div id="placeholder" class="columns">
             <div class="column is-vcentered is-full mt-6">
                 <div class="content">
-                    <i>Select a snippet in the treeview.</i>
+                    <i>Please select a snippet in the treeview.</i>
                 </div>
             </div>
         </div>
@@ -38,6 +46,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
 
     <script>
+        const isActive = "is-active";
+        
         function setViewerContent(id, title, content){
             $('#title-row').css("display", "");
             $('#content').css("display", "");
@@ -46,16 +56,6 @@
             $('#edit-button').attr("href", "/snippets/edit/" + id);
             $('#title').html(title);
             $('#content').html(marked(content));
-        }
-        
-        function resetViewer(){
-            $('#title-row').css("display", "none");
-            $('#content').css("display", "none");
-            $('#placeholder').css("display", "");
-            
-            $('#edit-button').attr("href", null);
-            $('#title').html(null);
-            $('#content').html(null);
         }
         
         function getSnippetContent(snippetId){
@@ -72,26 +72,17 @@
                 }
             });
         }
-
-        //menu-leaf : when clicking a menu-leaf, content should be displayed to the right, leaf should be put active
-        let allLeaves = $('.menu-leaf');
-        const isActive = "is-active";
-        allLeaves.click(function() { 
-            if ($(this).hasClass(isActive)){
-                //if current leaf is active, deactivate all leaves and reset viewer
-                allLeaves.removeClass(isActive);
-                resetViewer();
-            }     
-            else {
-                //if inactive, deactivate all leaves, activate current leaf and set viewer content
-                allLeaves.removeClass(isActive);
-                $(this).addClass(isActive);
-                let snippetId = $(this).attr("data-id");
-                getSnippetContent(snippetId);
-            }
-        });
         
-        //menu-node : when clicking a menu-node, the <ul> that is right next to it should be hidden or displayed
+        function resetViewer(){
+            $('#title-row').css("display", "none");
+            $('#content').css("display", "none");
+            $('#placeholder').css("display", "");
+            
+            $('#edit-button').attr("href", null);
+            $('#title').html(null);
+            $('#content').html(null);
+        }
+        
         function expandNode(node){
             let folderIcon = $(node).children('span.icon');
             folderIcon.removeClass("fa-folder")
@@ -109,7 +100,25 @@
             $(node).removeClass('expanded');
             $(node).addClass('collapsed');
         }
+
+        //menu-leaf : when clicking a menu-leaf, content should be displayed to the right, leaf should be put active
+        let allLeaves = $('.menu-leaf');
+        allLeaves.click(function() { 
+            if ($(this).hasClass(isActive)){
+                //if current leaf is active, deactivate all leaves and reset viewer
+                allLeaves.removeClass(isActive);
+                resetViewer();
+            }     
+            else {
+                //if inactive, deactivate all leaves, activate current leaf and set viewer content
+                allLeaves.removeClass(isActive);
+                $(this).addClass(isActive);
+                let snippetId = $(this).attr("data-id");
+                getSnippetContent(snippetId);
+            }
+        });
         
+        //menu-node : when clicking a menu-node, the <ul> that is right next to it should be hidden or displayed
         let allNodes = $('.menu-node');
         allNodes.click(function () {
             if ($(this).hasClass('collapsed')) {
@@ -117,9 +126,8 @@
             }
             else if ($(this).hasClass('expanded')) {
                 collapseNode($(this));    
-            }
-            
-            });
+            }    
+        });
     
         allNodes.each(function (index, value){ expandNode(value);});      
         resetViewer();

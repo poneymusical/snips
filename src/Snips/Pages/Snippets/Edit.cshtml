@@ -1,5 +1,6 @@
 ﻿@page "{id?}"
 @using System.Web
+@using Snips.ViewModels
 @model Snips.Pages.Snippets.Edit
 
 @{
@@ -18,6 +19,26 @@
             </div>
             <div class="column is-narrow">
                 <a id="cancel-button" href="/snippets" class="button is-light">Cancel</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Directory</label>
+        <p class="help">Choose the parent directory of your snippet. It may also be placed at the root.</p>
+        <div class="columns mt-0">
+            <div class="column">
+                <div class="select">
+                    @{
+                        var partialModel = new DirectoriesSelectViewModel
+                        {
+                            SelectId = "parentDirectory-select",
+                            Tree = Model.Tree,
+                            SelectedValueId = Model.Snippet.DirectoryId
+                        };
+                    }
+                    <partial name="Shared/_DirectoriesSelect" model="partialModel"/>
+                </div>
             </div>
         </div>
     </div>
@@ -47,10 +68,13 @@
         </div>
     </div>
 
-    <div class="field mt-6">
-        <label class="label">Danger zone</label>
-        <a id="delete-button" class="button is-danger">Delete snippet</a>
-    </div>
+    @if (@Model.Id.HasValue)
+    {
+        <div class="field mt-6">
+            <label class="label">Danger zone</label>
+            <a id="delete-button" class="button is-danger">Delete snippet</a>
+        </div>
+    }
 </form>
 
 @section Scripts
@@ -113,26 +137,32 @@
         
         tabs[0].click();
         
-        $('#delete-button').click(function (){
-            $.ajax({
-                type: "DELETE",
-                url: "/api/snippets/@Model.Snippet.Id",
-                contentType: "application/json",
-                dataType: "json",
-                success: function (response) {
-                    window.location = "/snippets";
-                },
-                failure: function (response) {
-                    alert(response);
-                }
+        @if (Model.Id.HasValue)
+        {
+            <text>
+            $('#delete-button').click(function (){
+                $.ajax({
+                    type: "DELETE",
+                    url: "/api/snippets/@Model.Snippet.Id",
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (response) {
+                        window.location = "/snippets";
+                    },
+                    failure: function (response) {
+                        alert(response);
+                    }
+                });
             });
-        });
+            </text>
+        }
         
         $('#save-button').click(function (){
             let snippet = {
                 id: "@Model.Snippet.Id",
                 title: $('#title-input').val(),
-                content: editor.getValue()
+                content: editor.getValue(),
+                directoryId: $('#parentDirectory-select').val()
             };
             
             $.ajax({

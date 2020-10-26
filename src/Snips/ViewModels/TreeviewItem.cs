@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Snips.Domain.BusinessObjects;
 
 namespace Snips.ViewModels
@@ -18,8 +17,6 @@ namespace Snips.ViewModels
         public TreeviewItemType Type { get; set; }
 
         private readonly List<TreeviewItem> _children;
-
-        public TreeviewItem Parent;
 
         public IReadOnlyList<TreeviewItem> Children
             => _children;
@@ -52,15 +49,10 @@ namespace Snips.ViewModels
                 throw new ArgumentException($"Node {treeviewItem.Id} is already a child of node {Id}",
                     nameof(treeviewItem));
 
-            if (treeviewItem.Parent != null)
-                throw new ArgumentException($"Node {treeviewItem.Id} already has a parent {treeviewItem.Parent.Id}",
-                    nameof(treeviewItem));
-
             if (treeviewItem == this)
                 throw new ArgumentException($"Node {treeviewItem.Id} cannot be added as child to itself");
 
             _children.Add(treeviewItem);
-            treeviewItem.Parent = this;
         }
 
         public bool Equals(TreeviewItem other)
