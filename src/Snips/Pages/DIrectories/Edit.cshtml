@@ -57,7 +57,7 @@
             $('#delete-button').click(function (){
                 $.ajax({
                     type: "DELETE",
-                    url: "/api/snippets/@Model.Directory.Id",
+                    url: "/api/directories/@Model.Directory.Id",
                     contentType: "application/json",
                     dataType: "json",
                     success: function (response) {

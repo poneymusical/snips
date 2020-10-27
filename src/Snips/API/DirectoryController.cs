@@ -10,20 +10,23 @@ namespace Snips.API
     [Route("api/directories")]
     public class DirectoryController : ControllerBase
     {
-        private readonly IRepository<Directory> _repository;
+        private readonly IRepository<Directory> _directoryRepository;
+        private readonly IRepository<Snippet> _snippetRepository;
         private readonly IValidator<Directory> _validator;
 
         public DirectoryController(
-            IRepository<Directory> repository, 
-            IValidator<Directory> validator)
+            IRepository<Directory> directoryRepository, 
+            IValidator<Directory> validator, 
+            IRepository<Snippet> snippetRepository)
         {
-            _repository = repository;
+            _directoryRepository = directoryRepository;
             _validator = validator;
+            _snippetRepository = snippetRepository;
         }
         
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id) => 
-            Ok(await _repository.GetSingle(id));
+            Ok(await _directoryRepository.GetSingle(id));
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Directory directory)
@@ -32,7 +35,7 @@ namespace Snips.API
             var validationResult = await _validator.ValidateAsync(directory);
             if (!validationResult.IsValid)
                 return BadRequest();
-            await _repository.Insert(directory);
+            await _directoryRepository.Insert(directory);
             return NoContent();
         }
 
@@ -42,18 +45,32 @@ namespace Snips.API
             var validationResult = await _validator.ValidateAsync(directory);
             if (!validationResult.IsValid)
                 return BadRequest();
-            await _repository.Update(directory);
+            await _directoryRepository.Update(directory);
             return NoContent();
         }
         
-        //TODO: for deletion, all snippets and children directories should be moved to root
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var directory = await _repository.GetSingle(id);
+            var directory = await _directoryRepository.GetSingle(id);
             if (directory == null)
                 return NotFound();
-            await _repository.Delete(directory);
+
+            var childrenDirectories = await _directoryRepository.Get(d => d.ParentDirectoryId == directory.Id);
+            foreach (var childDirectory in childrenDirectories)
+            {
+                childDirectory.ParentDirectoryId = directory.ParentDirectoryId;
+                await _directoryRepository.Update(childDirectory);
+            }
+
+            var childrenSnippets = await _snippetRepository.Get(s => s.DirectoryId == directory.Id);
+            foreach (var childSnippet in childrenSnippets)
+            {
+                childSnippet.DirectoryId = directory.ParentDirectoryId;
+                await _snippetRepository.Update(childSnippet);
+            }
+            
+            await _directoryRepository.Delete(directory);
             return NoContent();
         }
     }

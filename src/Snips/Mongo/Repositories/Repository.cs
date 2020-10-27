@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -24,6 +25,12 @@ namespace Snips.Mongo.Repositories
         public async Task<IList<TEntity>> GetAll()
         {
             var entities = await Collection.AsQueryable().ToListAsync();
+            return entities;
+        }
+
+        public async Task<IList<TEntity>> Get(Expression<Func<TEntity, bool>> criteria)
+        {
+            var entities = await Collection.AsQueryable().Where(criteria).ToListAsync();
             return entities;
         }
 
