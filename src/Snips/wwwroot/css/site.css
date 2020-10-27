@@ -33,7 +33,12 @@ li.menu-leaf.is-active {
     color: #fff;
 }
 
-div.menu-node, li.menu-leaf {
+div.columns.menu-folder {
+    padding: 0;
+    margin: 0;
+}
+
+div.menu-node, li.menu-leaf, div.column.is-narrow.edit-icon {
     padding-top: 0.5em;
     padding-right: 0.75em;
     padding-bottom: 0.25em;

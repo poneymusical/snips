@@ -14,10 +14,16 @@
         else if (item.Type == TreeviewItemType.Node)
         {
             <li>
-                <div class="menu-node">
-                    <span class="icon fas fa-folder"></span>
-                    <span>@item.Text</span>
-                </div >
+                <div class="columns menu-folder">
+                    <div class="menu-node column">
+                        <span class="icon fas fa-folder"></span>
+                        <span>@item.Text</span>
+                    </div >
+                    <div class="column is-narrow edit-icon" data-id="@item.Id">
+                        <span class="icon fas fa-pencil-alt" ></span>
+                    </div>
+                </div>
+
                 <partial name="_SnippetsTreeview" model="item.Children"/>
             </li>
         }

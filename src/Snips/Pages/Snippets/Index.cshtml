@@ -87,7 +87,7 @@
             let folderIcon = $(node).children('span.icon');
             folderIcon.removeClass("fa-folder")
             folderIcon.addClass("fa-folder-open");
-            $(node).siblings('ul').show();
+            $(node).parent().siblings('ul').show();
             $(node).removeClass('collapsed');
             $(node).addClass('expanded');
         }
@@ -96,7 +96,7 @@
             let folderIcon = node.children('span.icon');
             folderIcon.removeClass("fa-folder-open")
             folderIcon.addClass("fa-folder");
-            $(node).siblings('ul').hide();
+            $(node).parent().siblings('ul').hide();
             $(node).removeClass('expanded');
             $(node).addClass('collapsed');
         }
@@ -127,6 +127,12 @@
             else if ($(this).hasClass('expanded')) {
                 collapseNode($(this));    
             }    
+        });
+        
+        let allEditIcons = $('.edit-icon');
+        allEditIcons.click(function () {
+            let directoryId = $(this).attr("data-id");
+            window.location = "/directories/edit/" + directoryId;
         });
     
         allNodes.each(function (index, value){ expandNode(value);});      
