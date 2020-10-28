@@ -15,7 +15,7 @@
                 <a href="/directories/edit" class="button is-primary is-small">Add a directory</a>
             </div>
         </div>
-        
+
         <aside class="menu">
             <partial name="Shared/_SnippetsTreeview" model="Model.Tree"/>
         </aside>
@@ -27,6 +27,9 @@
             </div>
             <div class="column is-narrow is-vcentered">
                 <a id="edit-button" class="button is-primary">Edit</a>
+            </div>
+            <div class="column is-narrow is-vcentered">
+                <a id="share-button" class="button is-link">Share</a>
             </div>
         </div>
         <div id="content" class="content"></div>
@@ -44,7 +47,7 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
-
+    <script src="https://unpkg.com/bulma-toast@1.5.1/dist/bulma-toast.min.js"></script>
     <script>
         const isActive = "is-active";
         
@@ -54,6 +57,7 @@
             $('#placeholder').css("display", "none");
             
             $('#edit-button').attr("href", "/snippets/edit/" + id);
+            $('#share-button').attr("data-id", id);
             $('#title').html(title);
             $('#content').html(marked(content));
         }
@@ -79,6 +83,7 @@
             $('#placeholder').css("display", "");
             
             $('#edit-button').attr("href", null);
+            $('#share-button').attr("data-id", null);
             $('#title').html(null);
             $('#content').html(null);
         }
@@ -134,8 +139,43 @@
             let directoryId = $(this).attr("data-id");
             window.location = "/directories/edit/" + directoryId;
         });
+        
+        $('#share-button').click(function(){
+            let snippetId = $(this).attr("data-id");
+            if (snippetId == null)
+                return;
+            let url = window.location.origin + "/snippets?id=" + snippetId;
+            let el = document.createElement('textarea');
+            el.value = url;
+            el.setAttribute('readonly', '');
+            el.style.position = 'absolute';
+            el.style.left = '-9999px';
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            bulmaToast.toast({ 
+                message: 'Link copied to clipboard',
+                position: "bottom-center",
+                type: 'is-primary',
+                opacity: 0.8,
+                duration: 2000,
+                dismissible: true,
+            });
+        });
+        
     
         allNodes.each(function (index, value){ expandNode(value);});      
-        resetViewer();
+        let searcher = new URLSearchParams(window.location.search);
+        let snippetId = searcher.get("id");
+        if (snippetId != undefined && snippetId != null) {
+            let leaf = document.querySelector(`.menu-leaf[data-id="${snippetId}"]`);
+            if (leaf) {
+              leaf.click();
+            }
+        }
+        else {
+            resetViewer();
+        }
     </script>
 }

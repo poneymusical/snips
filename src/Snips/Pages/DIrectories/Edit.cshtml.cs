@@ -8,7 +8,7 @@ using Snips.Domain.Interfaces;
 using Snips.Services.Directories;
 using Snips.ViewModels;
 
-namespace Snips.Pages.DIrectories
+namespace Snips.Pages.Directories
 {
     public class Edit : PageModel
     {
