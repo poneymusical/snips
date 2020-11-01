@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Snips.Services.Directories;
 using Snips.ViewModels;
 
 namespace Snips.Pages.Snippets
 {
+    [Authorize]
     public class Index : PageModel
     {
         private readonly ITreeviewService _treeviewService;

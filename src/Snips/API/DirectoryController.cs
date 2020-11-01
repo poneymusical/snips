@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Snips.Domain.BusinessObjects;
 using Snips.Domain.Interfaces;
 
 namespace Snips.API
 {
+    [Authorize]
     [Route("api/directories")]
     public class DirectoryController : ControllerBase
     {

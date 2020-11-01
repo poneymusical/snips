@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Snips.Domain.BusinessObjects;
@@ -10,6 +11,7 @@ using Snips.ViewModels;
 
 namespace Snips.Pages.Directories
 {
+    [Authorize]
     public class Edit : PageModel
     {
         private readonly IRepository<Directory> _repository;

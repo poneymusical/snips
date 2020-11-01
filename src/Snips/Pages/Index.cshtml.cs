@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Snips.Pages
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         public IActionResult OnGet() => 
